@@ -64,18 +64,18 @@ def write_csv(filename: str, dataset: Dataset, sep: str = ',', features: bool = 
     label : bool, optional
         Whether the file has a label, by default False
     """
-    data = pd.DataFrame(dataset.X) #construir o dataframe 
+    data = pd.DataFrame(dataset.X) # construir o dataframe 
 
-    if features: #se tem features adiciono às colunas
+    if features: # se tem features adiciono às colunas
         data.columns = dataset.features
 
-    if label: #se tem y adiciono ao dataframe
+    if label: # se tem y adiciono ao dataframe
         data[dataset.label] = dataset.y
 
-    data.to_csv(filename, sep=sep, index=False)  #cria o csv
+    data.to_csv(filename, sep=sep, index=False)  # cria o csv
 
 
 if __name__ == '__main__':
-    df=read_csv(filename="datasets/iris.csv", sep=',')
+    df = read_csv(filename="datasets/iris.csv", sep=',')
     print(df.shape())
 

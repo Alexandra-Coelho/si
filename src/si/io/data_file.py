@@ -54,3 +54,4 @@ def write_data_file(filename: str, dataset: Dataset, sep: str = None, label: boo
         data = dataset.X
 
     return np.savetxt(filename, data, delimiter=sep)
+    
