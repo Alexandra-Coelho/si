@@ -27,6 +27,6 @@ def f_classification(dataset: Dataset) -> Union[Tuple[np.ndarray, np.ndarray], T
         p-values
     """
     classes = dataset.get_classes()
-    groups = [dataset.X[dataset.y == c] for c in classes]  #agrupa samples por classes
+    groups = [dataset.X[dataset.y == c] for c in classes]  # agrupa samples por classes
     F, p = stats.f_oneway(*groups) # * se tenho numa lista, vai extrair 
     return F, p
