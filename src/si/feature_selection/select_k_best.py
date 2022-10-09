@@ -59,8 +59,7 @@ class SelectKBest:
         dataset: Dataset
             A labeled dataset
         """
-        idxs = np.argsort(self.F)[-self.k:]  #indexes do F por ordem crescente, pex se o 5º valor e o mais baixo vai retornar no inicio a posiçao 4
-        #depois vou buscar as k melhores, como é crescente vou buscar ao contrario dai o - (as ultimas ate acabar)
+        idxs = np.argsort(self.F)[-self.k:]  #indexes do F por ordem crescente, depois vou buscar as k melhores features (as ultimas k)
         features = np.array(dataset.features)[idxs]
         return Dataset(X=dataset.X[:, idxs], y=dataset.y, features=list(features), label=dataset.label)
 
