@@ -1,6 +1,7 @@
 # modules
 from typing import Callable
 import numpy as np
+import warnings
 import sys
 sys.path.insert(0, 'src/si')
 from data.dataset import Dataset
@@ -12,7 +13,6 @@ class SelectPercentile:
     Select features with the highest scores according to the given percentile.
     Feature ranking is performed by computing the scores of each feature using a scoring function:
         - f_classification: ANOVA F-value between label/feature for classification tasks.
-        - f_regression: F-value obtained from F-value of r's pearson correlation coefficients for regression tasks.
     """
 
     def __init__(self, percentile: float, score_func: Callable = f_classification):
@@ -35,6 +35,7 @@ class SelectPercentile:
         """
         if not 0 < percentile < 1:
             raise  ValueError ("The percentile must be a value between 0 and 1.")
+
         self.percentile = percentile
         self.score_func = score_func
         self.F = None
@@ -61,6 +62,8 @@ class SelectPercentile:
         dataset: Dataset
             A labeled dataset
         """
+        if any(np.isnan(elem) for elem in self.F):
+            warnings.warn('Fit the selected percentile before the transform method')
         number_features = int(len(dataset.features) * self.percentile)
         idxs = np.argsort(self.F)[-number_features:]  
         features = np.array(dataset.features)[idxs]

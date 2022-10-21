@@ -1,6 +1,7 @@
 # modules 
 from typing import Callable
 import numpy as np
+import warnings
 import sys
 sys.path.insert(0, 'src/si')
 from data.dataset import Dataset
@@ -12,10 +13,9 @@ class SelectKBest:
     Select features according to the k highest scores.
     Feature ranking is performed by computing the scores of each feature using a scoring function:
         - f_classification: ANOVA F-value between label/feature for classification tasks.
-        - f_regression: F-value obtained from F-value of r's pearson correlation coefficients for regression tasks.
     """
 
-    def __init__(self, score_func: Callable = f_classification, k: int = 10):
+    def __init__(self, k: int, score_func: Callable = f_classification):
         """
         Select features according to the k highest scores.
 
@@ -33,7 +33,10 @@ class SelectKBest:
         p: array, shape (n_features,)
             p-values of F-scores.
         """
-        self.k = k
+        if k > 0:
+            self.k = k
+        else:
+            raise  ValueError("Invalid feature number, k must be greater than 0")
         self.score_func = score_func
         self.F = None
         self.p = None
@@ -59,6 +62,8 @@ class SelectKBest:
         dataset: Dataset
             A labeled dataset
         """
+        if any(np.isnan(elem) for elem in self.F):
+            warnings.warn('Fit the selected k best before the transform method')
         idxs = np.argsort(self.F)[-self.k:]  #indexes do F por ordem crescente, depois vou buscar as k melhores features (as ultimas k)
         features = np.array(dataset.features)[idxs]
         return Dataset(X=dataset.X[:, idxs], y=dataset.y, features=list(features), label=dataset.label)
@@ -77,9 +82,17 @@ class SelectKBest:
         return self.transform(dataset)
 
 if __name__ == "__main__":
-    selector = SelectKBest(score_func = f_classification, k=2)
-    dataset = Dataset(X=np.array([[9, 2, 7, 5],[2, 8, 4, 3],[5, 3, 6, 9]]), y=np.array([1, 1, 0]), features=["f1", "f2", "f3", "f4"], label="y")
+    print("--------Example 1--------")
+    selector = SelectKBest(k=2, score_func = f_classification)
+    dataset = Dataset(X=np.array([[0, 2, 0, 3], [0, 1, 4, 3], [0, 1, 1, 3]]), y=np.array([1, 1, 0]), features=["f1", "f2", "f3", "f4"], label="y")
     #print(f_classification(dataset))
     new_dataset = selector.fit_transform(dataset)
     print(new_dataset.features)
+
+    print("--------Example 2--------")
+    selector = SelectKBest(k=2, score_func = f_classification)
+    dataset = Dataset(X=np.array([[9, 2, 7, 5],[2, 8, 4, 3],[5, 3, 6, 9]]), y=np.array([1, 1, 0]), features=["f1", "f2", "f3", "f4"], label="y")
+    new_dataset = selector.fit_transform(dataset)
+    print(new_dataset.features)
+    
 

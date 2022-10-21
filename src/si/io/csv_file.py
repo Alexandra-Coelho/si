@@ -24,8 +24,8 @@ def read_csv(filename: str, sep: str = ',', features: bool = False, label: bool 
     if features and label: 
         features = data.columns[:-1]
         label = data.columns[-1] 
-        X = data.iloc[1, 0:-1].to_numpy()
-        y = data.iloc[1, -1].to_numpy() 
+        X = data.iloc[:, :-1].to_numpy()
+        y = data.iloc[:, -1].to_numpy() 
 
     elif features and not label: #se nao tem label, mas tem features
         features = data.columns
