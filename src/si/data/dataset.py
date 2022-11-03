@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+
+# modules
 import numpy as np
 import pandas as pd
+from typing import Tuple, Sequence
 
 class Dataset:
     """
@@ -31,7 +35,7 @@ class Dataset:
         self.features = features
         self.label = label  
 
-    def shape(self) -> tuple:
+    def shape(self) -> Tuple[int, int]:
         """
         Returns a tuple with the dataset dimensions
         """
@@ -113,6 +117,28 @@ class Dataset:
         """
         self.X[np.isnan(self.X)] = value  # no indice onde é True (é NaN) substitui isso por um valor
         # ou np.nan_to_num(self.X, nan = value)
+
+    @classmethod
+    def from_random(cls, n_samples: int, n_features: int, n_classes: int = 2, features: Sequence[str] = None, label: str = None):
+        """
+        Creates a Dataset object from random data
+
+        Parameters
+        ----------
+        n_samples: int
+            The number of samples
+        n_features: int
+            The number of features
+        n_classes: int
+            The number of classes
+        features: list of str
+            The feature names
+        label: str
+            The label name
+        """
+        X = np.random.rand(n_samples, n_features)
+        y = np.random.randint(0, n_classes, n_samples)
+        return cls(X, y, features=features, label=label)
 
 
 if __name__ == '__main__':

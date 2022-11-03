@@ -190,7 +190,7 @@ if __name__ == "__main__":
     from si.io.csv_file import read_csv
     from si.model_selection.split import train_test_split
     path = 'C:/Users/ASUS/Desktop/Bioinfo/2ano/Sistemas Inteligentes/si/datasets/breast-bin.csv'
-    breast = read_csv(path, sep = ",", features = True, label = True)
+    breast = read_csv(path, sep = ",", features = False, label = True)
     
     from sklearn.preprocessing import StandardScaler
     breast.X = StandardScaler().fit_transform(breast.X) # para normalizar dados
