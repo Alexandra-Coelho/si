@@ -95,7 +95,7 @@ class RidgeRegression:
             self.gradient_descent(dataset)
             self.cost_history[i] = self.cost(dataset)  # iteration number: iteration cost
             
-            if i !=0 and self.cost_history[i-1] - self.cost_history[i] < 1: # check the difference between the cost of the previous and the current iteration
+            if i > 0 and self.cost_history[i-1] - self.cost_history[i] < 1: # check the difference between the cost of the previous and the current iteration
                 break
         return self
 
@@ -121,7 +121,7 @@ class RidgeRegression:
             self.gradient_descent(dataset)
             self.cost_history[i] = self.cost(dataset) 
             
-            if i !=0 and self.cost_history[i-1] - self.cost_history[i] < 1: 
+            if i > 0 and self.cost_history[i-1] - self.cost_history[i] < 1: 
                 self.alpha = self.alpha / 2  # updating the learning rate
         return self
 

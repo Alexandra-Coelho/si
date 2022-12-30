@@ -93,11 +93,11 @@ class LogisticRegression:
         self.theta_zero = 0
 
         # gradient descent
-        for i in range(self.max_iter):
+        for i in range (self.max_iter):
             self.gradient_descent(dataset)
             self.cost_history[i] = self.cost(dataset) # iteration number: iteration cost
 
-            if i !=0 and self.cost_history[i-1] - self.cost_history[i] < 0.0001: # check the difference between the cost of the previous and the current iteration
+            if i > 0 and self.cost_history[i-1] - self.cost_history[i] < 0.0001: # check the difference between the cost of the previous and the current iteration
                 break
         return self
 
@@ -123,7 +123,7 @@ class LogisticRegression:
             self.gradient_descent(dataset)
             self.cost_history[i] = self.cost(dataset) 
             
-            if i !=0 and self.cost_history[i-1] - self.cost_history[i] < 0.0001: 
+            if i > 0 and self.cost_history[i-1] - self.cost_history[i] < 0.0001: 
                 self.alpha = self.alpha / 2  # updating the learning rate
         return self
 
@@ -177,11 +177,13 @@ class LogisticRegression:
             The dataset to compute the cost function on
         """
         # nao podemos usar o predict (dá o binário), queremos os valores estimados na regressao
+        
         m, n = dataset.shape()
         y_pred = sigmoid_function(np.dot(dataset.X, self.theta) + self.theta_zero)
         first = (-1 / m) * np.sum(dataset.y * np.log(y_pred) + (1 - dataset.y) * np.log(1 - y_pred))
         score = first + (self.l2_penalty / (2 * m)) * np.sum(self.theta **2)
-        return round(score, 4)
+        return score
+        
 
 
 if __name__ == "__main__":
