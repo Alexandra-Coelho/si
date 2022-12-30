@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 # modules
-import numpy as np
 import sys
+from typing import *
+
+import numpy as np
+
 sys.path.insert(0, 'src/si')
 from data.dataset import Dataset
 from metrics.accuracy import accuracy
@@ -14,7 +17,7 @@ class StackingClassifier:
     These predictions are then used to train the final model. The final model can then be used to predict the output variable (Y).
     """
 
-    def __init__(self, models: list, final_model):
+    def __init__(self, models: list, final_model: Callable):
         """
         Initializes the StackingClassifier object.
 
@@ -22,7 +25,7 @@ class StackingClassifier:
         ----------
         models: list
             List of initialized models of classifiers
-        final_model:
+        final_model: Callable
             Final model classifier
         """
         self.models = models 
@@ -84,11 +87,11 @@ if __name__ == "__main__":
     breast.X = StandardScaler().fit_transform(breast.X) # para normalizar as features
     train, test = train_test_split(breast, test_size=0.3, random_state=2)
     
-    from si.neighbors.knn_classifier import KNNClassifier
     from si.linear_model.logistic_regression import LogisticRegression
+    from si.neighbors.knn_classifier import KNNClassifier
     knn = KNNClassifier(k=3)
     lg = LogisticRegression(use_adaptive_alpha=False)
-    final_model = KNNClassifier(k=4)
+    final_model = KNNClassifier(k=2)
 
     stacking = StackingClassifier([knn, lg], final_model)
     stacking.fit(train)
