@@ -138,7 +138,18 @@ class Dataset:
         """
         X = np.random.rand(n_samples, n_features)
         y = np.random.randint(0, n_classes, n_samples)
-        return cls(X, y, features=features, label=label)
+        return cls(X, y, features = features, label = label)
+
+    def print_dataframe(self):
+        """
+        Prints dataframe in pandas DataFrame format
+        """
+
+        if self.y is None:
+            return pd.DataFrame(self.X, columns = self.features)
+        else:
+            return pd.DataFrame(self.X, columns = self.features, index = self.y)
+
 
 
 if __name__ == '__main__':
